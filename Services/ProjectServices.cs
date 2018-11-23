@@ -21,8 +21,7 @@ namespace MusiCoLab2.Services
         {
             var projects = _db.Projects
                 .Include( p => p.ProjectOwner)
-                   // .ThenInclude(po => po.Id.ToString())
-               .Include( p => p.ProjectContributors)//.ThenInclude(pc => pc.)
+               .Include( p => p.ProjectContributors)
                 .ToList();
             return projects;
         }
@@ -38,7 +37,10 @@ namespace MusiCoLab2.Services
 
         public Project Find(long id)
         {
-            return _db.Projects.FirstOrDefault(project => project.Id == id);
+            return _db.Projects
+                .Include(p => p.ProjectOwner)
+               .Include(p => p.ProjectContributors)
+               .FirstOrDefault(project => project.Id == id);
         }
         public Project FindWithOwner(long id)
         {
